@@ -348,8 +348,9 @@ planes.f <- planes %>%  filter(!(manufacturer %in% c("MCDONELL DOUGLAS", "DOUGLA
 
 Crea un data frame denominado `flights.f` que contenga los vuelos que involucren a los aviones presentes en el data frame `planes.f`. Para ello utiliza algunas de las funciones de **XXX_join** y la variable `tailnum` que es común en ambos data frames.
 
-```{r }
-
+```{r}
+#para quedarnos con la información de los vuelos pero no la de los aviones usamos un semijoin, como primer conjunto el de vuelos y el segundo el de aviones (filtrado), usamos la variable en comun "tailnum" 
+flights.f <- flights %>% semi_join(planes.f, by="tailnum")
 
 ```
 
