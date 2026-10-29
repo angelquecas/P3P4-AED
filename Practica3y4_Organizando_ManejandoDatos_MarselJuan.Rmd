@@ -403,7 +403,7 @@ Incorpora una nueva variable a `flights` denominado `Full_Date` que sea de tipo 
 ```{r }
 #mediante mutate podemos crear una nueva variable. Así que unimos las variables "day",
 #"month" y "year" con "-" para crear esta nueva variable. Posteriormente, quitamos las variables usadas.
-flights <- flights %>% mutate(Full_Date = paste(day, month, year, sep = "-") %>% select(-year, -month, -day)
+flights <- flights %>% mutate(Full_Date = paste(day, month, year, sep = "-")) %>% select(-year, -month, -day)
 
 ```
 
