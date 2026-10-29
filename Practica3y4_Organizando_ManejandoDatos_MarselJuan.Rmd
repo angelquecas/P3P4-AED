@@ -205,7 +205,8 @@ Convierte el dataset `pew_religion` a formato *tidy* usando `gather`. La columna
 ```{r}
 #cargamos los datos
 load('data/pew_religion.Rdata')
-#con gather, especificamos las columnas "nuevas" que queremos y también cuales usar para construirlas, definimos como factor la variable "income"
+#con gather, especificamos las columnas "nuevas" que queremos y
+#también cuales usar para construirlas, definimos como factor la variable "income"
 pew_religion <- gather(pew_religion, income, cases, -religion, factor_key=T)
 
 
@@ -230,8 +231,8 @@ Consejo: puedes eliminar el prefijo `wk` de las semanas mediante el argumento `n
 
 ```{r}
 #aplicamos pivot_longer sobre el df messy, queremos cambiar las columnas wk1,wk2,wk3...wk76,
-#poner los nombres de las columnas en "week" y su valor en "rank", por otra parte, quitamos el prefijo "wk",
-#además quitamos los NA
+#poner los nombres de las columnas en "week" y su valor en "rank", por otra parte, quitamos
+#el prefijo "wk", además quitamos los NA
 tidy_billboard <- raw %>% pivot_longer(cols = wk1:wk76,names_to = "week",names_prefix = "wk",values_to = "rank",values_drop_na = TRUE)
 
 ```
@@ -256,7 +257,8 @@ Convierte el conjunto de datos TB en *tidy* utilizando `gather` y `separate`.
 
 ```{r}
 #usamos los datos de TB, vamos a cambiar el orden de las columnas desde m014 hasta fu,el nombre de
-#dichas columnas lo ponemos en una nueva columna llamada "sexoEdades" y los valores en "num_casos_tuberculosis".
+#dichas columnas lo ponemos en una nueva columna llamada "sexoEdades" y los valores en
+#"num_casos_tuberculosis".
 #Posteriormente, separamos la variable sexoEdades en dos diferentes, la de "Sexo" y la de "Edades"
 #como separador usamos 1, porque el sexo se indica en la primera letra y el rango de edades 
 #en el resto
@@ -349,11 +351,12 @@ En nuestro estudio queremos aplicar una serie de criterios de exclusión sobre l
 - Nota: Revisar el uso de la función filter vista en clase y tener en cuenta los operadores de comparación: igual ==, distinto !=, mayor \>, mayor o igual \>=, menor \<, menor o igual \<=.
 
 ```{r }
-#Primero vamos a quitar todas aquellas filas que tengan en la variable manufacturer algo relacionado con
-#"MCDONELL DOUGLAS" que son las que tienen literalmente "MCDONELL DOUGLAS", las que tienen "DOUGLAS"
-#y "MCDONELL DOUGLAS AIRCRAFT", por otra parte nos quedamos únicamente con las que tengan >= 90
-#asientos y <=210. Después, aquellas filas que tengan en la columna "manufacturer" las cadenas "AIRBUS INDUSTRIE"
-#o "AIRBUS" pasan a ser "AIRBUS COMP".
+#Primero vamos a quitar todas aquellas filas que tengan en la variable manufacturer algo 
+#relacionado con "MCDONELL DOUGLAS" que son las que tienen literalmente "MCDONELL DOUGLAS",
+#las que tienen "DOUGLAS" y "MCDONELL DOUGLAS AIRCRAFT", por otra parte nos quedamos
+#únicamente con las que tengan >= 90 asientos y <=210. Después, aquellas filas que tengan
+#en la columna "manufacturer" las cadenas "AIRBUS INDUSTRIE"o "AIRBUS" 
+#pasan a ser "AIRBUS COMP".
 
 planes.f <- planes %>%  filter(!(manufacturer %in% c("MCDONELL DOUGLAS", "DOUGLAS", "MCDONELL DOUGLAS AIRCRAFT"))) %>% filter(seats >= 90 & seats <= 210) %>%mutate(manufacturer = if_else(manufacturer %in% c("AIRBUS INDUSTRIE", "AIRBUS"), "AIRBUS COMP", manufacturer)
   )
@@ -367,7 +370,8 @@ Crea un data frame denominado `flights.f` que contenga los vuelos que involucren
 
 ```{r}
 #para quedarnos con la información de los vuelos pero no la de los aviones usamos un semijoin,
-#como primer conjunto el de vuelos y el segundo el de aviones (filtrado), usamos la variable en comun "tailnum" 
+#como primer conjunto el de vuelos y el segundo el de aviones (filtrado), usamos la variable en 
+#comun "tailnum" 
 flights.f <- flights %>% semi_join(planes.f, by="tailnum")
 
 ```
@@ -390,7 +394,8 @@ Existen variables que, a priori, no tienen demasiado interés para el estudio qu
 - En el data frame `planes` quédate con todas las variables excepto `speed` y `type`.
 
 ```{r }
-#usamos select para poner las columnas que queremos, o en este caso, es más útil poner las que NO queremos,
+#usamos select para poner las columnas que queremos, o en este caso,
+#es más útil poner las que NO queremos,
 #con el "-". Además, con la función ends_with podemos identificar que variables acaban en "time".
 flights <- flights %>% select(-time_hour, -ends_with("time"))
 planes<- planes %>% select(-speed,-type)
@@ -402,7 +407,8 @@ Incorpora una nueva variable a `flights` denominado `Full_Date` que sea de tipo 
 
 ```{r }
 #mediante mutate podemos crear una nueva variable. Así que unimos las variables "day",
-#"month" y "year" con "-" para crear esta nueva variable. Posteriormente, quitamos las variables usadas.
+#"month" y "year" con "-" para crear esta nueva variable. 
+#Posteriormente, quitamos las variables usadas.
 flights <- flights %>% mutate(Full_Date = paste(day, month, year, sep = "-")) %>% select(-year, -month, -day)
 
 ```
@@ -412,10 +418,11 @@ flights <- flights %>% mutate(Full_Date = paste(day, month, year, sep = "-")) %>
 Utilizando las funciones `group_by`, `summarise` y `filter`, crea un data frame donde se calcule el número de vuelos (`Num_flights`), la distancia media recorrida (`Mean_distance`) y la distancia total recorrida (`Total_distance`) para cada uno de los aviones (`tailnum`) presentes en el conjunto `flights`. Descarta aquellos registros del data frame en los que la variable `tailnum` tenga un valor NA. Utiliza el operador pipe para enlazar las funciones. Almacena el data frame en una variable denominada `Distances_plane`.
 
 ```{r }
-#Para conseguir las métricas que se nos pide primero, quitamos aquellas filas donde la variable "tailnum" sea NA,
-#posteriormente agrupamos por "tailnum" y con summarise podemos calcular diferentes métricas,
-#usando n() calculamos el número de veces que aparece cada "tailnum" en "flights", con mean
-#calculamos la media de la distancia recorrida y con sum la distancia total de recorrido por cada avión.
+#Para conseguir las métricas que se nos pide primero, quitamos aquellas filas donde la variable 
+#"tailnum" sea NA,posteriormente agrupamos por "tailnum" y con summarise podemos calcular
+#diferentes métricas,usando n() calculamos el número de veces que aparece cada "tailnum"
+#en "flights", con mean calculamos la media de la distancia recorrida y con sum la distancia
+#total de recorrido por cada avión.
 Distances_plane <- flights %>% filter(!is.na(tailnum)) %>%group_by(tailnum) %>% summarise(Num_flights = n(),Mean_distance = mean(distance, na.rm = TRUE), Total_distance = sum(distance, na.rm = TRUE))
 ```
 
