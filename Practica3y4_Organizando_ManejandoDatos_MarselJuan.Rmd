@@ -416,7 +416,7 @@ Utilizando las funciones `group_by`, `summarise` y `filter`, crea un data frame 
 #posteriormente agrupamos por "tailnum" y con summarise podemos calcular diferentes métricas,
 #usando n() calculamos el número de veces que aparece cada "tailnum" en "flights", con mean
 #calculamos la media de la distancia recorrida y con sum la distancia total de recorrido por cada avión.
-metricas_flights <- flights %>% filter(!is.na(tailnum)) %>%group_by(tailnum) %>% summarise(Num_flights = n(),Mean_distance = mean(distance, na.rm = TRUE), Total_distance = sum(distance, na.rm = TRUE))
+Distances_plane <- flights %>% filter(!is.na(tailnum)) %>%group_by(tailnum) %>% summarise(Num_flights = n(),Mean_distance = mean(distance, na.rm = TRUE), Total_distance = sum(distance, na.rm = TRUE))
 ```
 
 # Ejercicios Extra
