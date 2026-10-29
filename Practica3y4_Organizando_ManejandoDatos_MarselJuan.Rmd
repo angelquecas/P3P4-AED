@@ -337,7 +337,9 @@ En nuestro estudio queremos aplicar una serie de criterios de exclusión sobre l
 - Nota: Revisar el uso de la función filter vista en clase y tener en cuenta los operadores de comparación: igual ==, distinto !=, mayor \>, mayor o igual \>=, menor \<, menor o igual \<=.
 
 ```{r }
-
+#Primero vamos a quitar todas aquellas filas que tengan en la variable manufacturer algo relacionado con "MCDONELL DOUGLAS" que son las que tienen literalmente "MCDONELL DOUGLAS", las que tienen "DOUGLAS" y "MCDONELL DOUGLAS AIRCRAFT", por otra parte nos quedamos unicamente con las que tengan >= 90 asientos y <=210. Después, aquellas filas que tengan en la columna "manufacturer" las cadenas "AIRBUS INDUSTRIE" o "AIRBUS" pasan a ser "AIRBUS COMP".
+planes.f <- planes %>%  filter(!(manufacturer %in% c("MCDONELL DOUGLAS", "DOUGLAS", "MCDONELL DOUGLAS AIRCRAFT"))) %>% filter(seats >= 90 & seats <= 210) %>%mutate(manufacturer = if_else(manufacturer %in% c("AIRBUS INDUSTRIE", "AIRBUS"), "AIRBUS COMP", manufacturer)
+  )
 
 
 ```
