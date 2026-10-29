@@ -229,7 +229,9 @@ Obtén la versión *tidy* de este conjunto de datos usando `pivot_longer`.
 Consejo: puedes eliminar el prefijo `wk` de las semanas mediante el argumento `names_prefix`. Opcionalmente puedes crear una columna `date` a partir de `date.entered`, sumando las semanas transcurridas desde la fecha de entrada en lista.
 
 ```{r}
-#aplicamos pivot_longer sobre el df messy, queremos cambiar las columnas wk1,wk2,wk3...wk76, poner los nombres de las columnas en "week" y su valor en "rank", por otra parte, quitamos el prefijo "wk", ademas quitamos los NA
+#aplicamos pivot_longer sobre el df messy, queremos cambiar las columnas wk1,wk2,wk3...wk76,
+#poner los nombres de las columnas en "week" y su valor en "rank", por otra parte, quitamos el prefijo "wk",
+#además quitamos los NA
 tidy_billboard <- raw %>% pivot_longer(cols = wk1:wk76,names_to = "week",names_prefix = "wk",values_to = "rank",values_drop_na = TRUE)
 
 ```
@@ -253,7 +255,11 @@ Para pasar a formato *tidy* necesitamos realizar dos operaciones en este caso. E
 Convierte el conjunto de datos TB en *tidy* utilizando `gather` y `separate`.
 
 ```{r}
-#usamos los datos de TB, vamos a cambiar el orden de las columnas desde m014 hasta fu, el nombre de dichas columnas lo ponemos en una nueva columna llamada "sexoEdades" y los valores en "num_casos_tuberculosis". Posteriormente, separamos la variable sexoEdades en dos diferentes, la de "Sexo" y la de "Edades" como separador usamos 1, porque el sexo se indica en la primera letra y el rango de edades en el resto
+#usamos los datos de TB, vamos a cambiar el orden de las columnas desde m014 hasta fu,el nombre de
+#dichas columnas lo ponemos en una nueva columna llamada "sexoEdades" y los valores en "num_casos_tuberculosis".
+#Posteriormente, separamos la variable sexoEdades en dos diferentes, la de "Sexo" y la de "Edades"
+#como separador usamos 1, porque el sexo se indica en la primera letra y el rango de edades 
+#en el resto
 
 tidy_tb <- raw %>% gather(-c(country,year),key = "sexoEdades",value = "num_casos_tuberculosis",na.rm = TRUE)  %>% separate(sexoEdades, c("Sexo", "Edad"), sep=1)
 ```
@@ -278,7 +284,12 @@ Obtén la versión *tidy* del conjunto de datos `weather` utilizando las funcion
 ```{r}
 #cargamos el df
 load('data/weather.Rdata')
-#Vamos a cambiar las columnas d1,d2...d31, pondremos el dia en la variable "dia" quitando la "d", los valores en "valor", quitamos los NA, posteriormente vamos a pasar de una columna element a dos columnas "tmax" y "tmin". Creamos una columna "fecha", para ello dia debe ser un entero, uniremos year, month y dia con "-" y lo pasamos a formato Date, posteriormente eliminamos las columnas year, month y dia.
+#Vamos a cambiar las columnas d1,d2...d31, pondremos el día en la variable "dia" quitando la "d",
+#los valores en "valor", quitamos los NA, posteriormente vamos a pasar de una columna element
+#a dos columnas "tmax" y "tmin". Creamos una columna "fecha", para ello "dia" debe ser un entero,
+#uniremos "year", "month" y "dia" con "-" y lo pasamos a formato Date, posteriormente eliminamos
+#las columnas year, month y dia.
+
 tidy_weather <- raw %>%  pivot_longer(cols = d1:d31,names_to = "dia", names_prefix = "d",values_to = "valor",values_drop_na = TRUE) %>% pivot_wider(names_from = element,values_from = valor) %>% mutate(dia = as.integer(dia),fecha = as.Date(paste(year, month, dia, sep="-"))) %>% select(-year, -month, -dia)
 
 ```
@@ -327,7 +338,8 @@ Muestra las primeras muestras de ambos data frames para hacerte una idea de las 
 ```{r }
 head(flights)
 head(planes)
-#El primer conjunto de datos registra información sobre los vuelos realizados (cada fila es un vuelo), mientras que el segundo registra información de diferentes aviones (cada fila es un avión).
+#El primer conjunto de datos registra información sobre los vuelos realizados (cada fila es un vuelo),
+#mientras que el segundo registra información de diferentes aviones (cada fila es un avión).
 ```
 
 ### Ejercicio 6
@@ -337,7 +349,12 @@ En nuestro estudio queremos aplicar una serie de criterios de exclusión sobre l
 - Nota: Revisar el uso de la función filter vista en clase y tener en cuenta los operadores de comparación: igual ==, distinto !=, mayor \>, mayor o igual \>=, menor \<, menor o igual \<=.
 
 ```{r }
-#Primero vamos a quitar todas aquellas filas que tengan en la variable manufacturer algo relacionado con "MCDONELL DOUGLAS" que son las que tienen literalmente "MCDONELL DOUGLAS", las que tienen "DOUGLAS" y "MCDONELL DOUGLAS AIRCRAFT", por otra parte nos quedamos unicamente con las que tengan >= 90 asientos y <=210. Después, aquellas filas que tengan en la columna "manufacturer" las cadenas "AIRBUS INDUSTRIE" o "AIRBUS" pasan a ser "AIRBUS COMP".
+#Primero vamos a quitar todas aquellas filas que tengan en la variable manufacturer algo relacionado con
+#"MCDONELL DOUGLAS" que son las que tienen literalmente "MCDONELL DOUGLAS", las que tienen "DOUGLAS"
+#y "MCDONELL DOUGLAS AIRCRAFT", por otra parte nos quedamos únicamente con las que tengan >= 90
+#asientos y <=210. Después, aquellas filas que tengan en la columna "manufacturer" las cadenas "AIRBUS INDUSTRIE"
+#o "AIRBUS" pasan a ser "AIRBUS COMP".
+
 planes.f <- planes %>%  filter(!(manufacturer %in% c("MCDONELL DOUGLAS", "DOUGLAS", "MCDONELL DOUGLAS AIRCRAFT"))) %>% filter(seats >= 90 & seats <= 210) %>%mutate(manufacturer = if_else(manufacturer %in% c("AIRBUS INDUSTRIE", "AIRBUS"), "AIRBUS COMP", manufacturer)
   )
 
@@ -349,7 +366,8 @@ planes.f <- planes %>%  filter(!(manufacturer %in% c("MCDONELL DOUGLAS", "DOUGLA
 Crea un data frame denominado `flights.f` que contenga los vuelos que involucren a los aviones presentes en el data frame `planes.f`. Para ello utiliza algunas de las funciones de **XXX_join** y la variable `tailnum` que es común en ambos data frames.
 
 ```{r}
-#para quedarnos con la información de los vuelos pero no la de los aviones usamos un semijoin, como primer conjunto el de vuelos y el segundo el de aviones (filtrado), usamos la variable en comun "tailnum" 
+#para quedarnos con la información de los vuelos pero no la de los aviones usamos un semijoin,
+#como primer conjunto el de vuelos y el segundo el de aviones (filtrado), usamos la variable en comun "tailnum" 
 flights.f <- flights %>% semi_join(planes.f, by="tailnum")
 
 ```
@@ -359,7 +377,7 @@ flights.f <- flights %>% semi_join(planes.f, by="tailnum")
 Reasigna los nombres de los data frames `planes.f` y `flights.f` a los nombres originales `planes` y `flights`.
 
 ```{r }
-#hacemos una reasignacion de variables
+#hacemos una reasignación de variables
 planes<-planes.f
 flights<-flights.f
 ```
@@ -372,7 +390,8 @@ Existen variables que, a priori, no tienen demasiado interés para el estudio qu
 - En el data frame `planes` quédate con todas las variables excepto `speed` y `type`.
 
 ```{r }
-#usamos select para poner las columnas que queremos, o en este caso, es más útil poner las que NO queremos, con el "-". Además, con la función ends_with podemos identificar que variables acaban en "time".
+#usamos select para poner las columnas que queremos, o en este caso, es más útil poner las que NO queremos,
+#con el "-". Además, con la función ends_with podemos identificar que variables acaban en "time".
 flights <- flights %>% select(-time_hour, -ends_with("time"))
 planes<- planes %>% select(-seed,-type)
 ```
@@ -382,7 +401,8 @@ planes<- planes %>% select(-seed,-type)
 Incorpora una nueva variable a `flights` denominado `Full_Date` que sea de tipo `character` que incorpore una cadena de texto de la forma `d-m-Y`. Donde `d` indica día, `m` mes e `Y` año, a partir de la información incluida en el data frame. Utiliza una función de **DPLYR** que permita conseguir este propósito. Elimina las variables originales involucradas en la creación de la nueva variable.
 
 ```{r }
-#mediante mutate podemos crear una nueva variable. Así que unimos las variables "day", "month" y "year" con "-" para crear esta nueva variable. Posteriormente, quitamos las variables usadas.
+#mediante mutate podemos crear una nueva variable. Así que unimos las variables "day",
+#"month" y "year" con "-" para crear esta nueva variable. Posteriormente, quitamos las variables usadas.
 flights <- flights %>% mutate(Full_Date = paste(day, month, year, sep = "-") %>% select(-year, -month, -day)
 
 ```
@@ -392,9 +412,11 @@ flights <- flights %>% mutate(Full_Date = paste(day, month, year, sep = "-") %>%
 Utilizando las funciones `group_by`, `summarise` y `filter`, crea un data frame donde se calcule el número de vuelos (`Num_flights`), la distancia media recorrida (`Mean_distance`) y la distancia total recorrida (`Total_distance`) para cada uno de los aviones (`tailnum`) presentes en el conjunto `flights`. Descarta aquellos registros del data frame en los que la variable `tailnum` tenga un valor NA. Utiliza el operador pipe para enlazar las funciones. Almacena el data frame en una variable denominada `Distances_plane`.
 
 ```{r }
-#Para conseguir las métricas que se nos pide primero, quitamos aquellas filas donde la variable "tailnum" sea NA, posteriormente agrupamos por "tailnum" y con summarise podemos calcular diferentes métricas, usando n() calculamos el número de veces que aparece cada "tailnum" en "flights", con mean calculamos la media de la distancia recorrida y con sum el la distancia total recorrido por cada avión.
-metricas_flights <- flights %>% filter(!is.na(tailnum)) %>%group_by(tailnum) %>% summarise(Num_flights = n(),Mean_distance = mean(distance, na.rm = TRUE), Total_distance = sum(distance, na.rm = TRUE)
-  )
+#Para conseguir las métricas que se nos pide primero, quitamos aquellas filas donde la variable "tailnum" sea NA,
+#posteriormente agrupamos por "tailnum" y con summarise podemos calcular diferentes métricas,
+#usando n() calculamos el número de veces que aparece cada "tailnum" en "flights", con mean
+#calculamos la media de la distancia recorrida y con sum la distancia total de recorrido por cada avión.
+metricas_flights <- flights %>% filter(!is.na(tailnum)) %>%group_by(tailnum) %>% summarise(Num_flights = n(),Mean_distance = mean(distance, na.rm = TRUE), Total_distance = sum(distance, na.rm = TRUE))
 ```
 
 # Ejercicios Extra
