@@ -372,7 +372,9 @@ Existen variables que, a priori, no tienen demasiado interés para el estudio qu
 - En el data frame `planes` quédate con todas las variables excepto `speed` y `type`.
 
 ```{r }
-
+#usamos select para poner las columnas que queremos, o en este caso, es más útil poner las que NO queremos, con el "-". Además, con la función ends_with podemos identificar que variables acaban en "time".
+flights <- flights %>% select(-time_hour, -ends_with("time"))
+planes<- planes %>% select(-seed,-type)
 ```
 
 ### Ejercicio 10
