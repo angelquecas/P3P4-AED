@@ -253,9 +253,7 @@ Para pasar a formato *tidy* necesitamos realizar dos operaciones en este caso. E
 Convierte el conjunto de datos TB en *tidy* utilizando `gather` y `separate`.
 
 ```{r}
-#usamos los datos de TB, vamos a cambiar el orden de las columnas desde m014 hasta fu, el nombre de dichas columnas lo ponemos en una nueva columna llamada "sexoEdades" y los valores en "num_casos_tuberculosis". Posteriormente, separamos la variable sexoEdades en dos diferentes, la de "Sexo" y la de "Edades" como separador usamos 1, porque el sexo se indica en la primera letra y el rango de edades en el resto
 
-tidy_tb <- raw %>% gather(-c(country,year),key = "sexoEdades",value = "num_casos_tuberculosis",na.rm = TRUE)  %>% separate(sexoEdades, c("Sexo", "Edad"), sep=1)
 ```
 
 ## Variables almacenadas tanto en filas como en columnas
