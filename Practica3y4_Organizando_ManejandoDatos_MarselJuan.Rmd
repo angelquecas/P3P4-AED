@@ -276,8 +276,10 @@ Para obtener la versión *tidy* primero juntamos todos los días en una variable
 Obtén la versión *tidy* del conjunto de datos `weather` utilizando las funciones `pivot_longer` y `pivot_wider`. Además cambiaremos las columnas `year`, `month` y `dia` por una única variable `fecha`. Para que la operación `pivot_wider` no de error tendremos que eliminar los NA's cuando usemos `pivot_longer`.
 
 ```{r}
+#cargamos el df
 load('data/weather.Rdata')
-
+#Vamos a cambiar las columnas d1,d2...d31, pondremos el dia en la variable "dia" quitando la "d", los valores en "valor", quitamos los NA, posteriormente vamos a pasar de una columna element a dos columnas "tmax" y "tmin". Creamos una columna "fecha", para ello dia debe ser un entero, uniremos year, month y dia con "-" y lo pasamos a formato Date, posteriormente eliminamos las columnas year, month y dia.
+tidy_weather <- raw %>%  pivot_longer(cols = d1:d31,names_to = "dia", names_prefix = "d",values_to = "valor",values_drop_na = TRUE) %>% pivot_wider(names_from = element,values_from = valor) %>% mutate(dia = as.integer(dia),fecha = as.Date(paste(year, month, dia, sep="-"))) %>% select(-year, -month, -dia)
 
 ```
 
