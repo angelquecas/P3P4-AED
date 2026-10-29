@@ -2,15 +2,15 @@
 title: "Práctica 3 y 4. Preparación y manejo de Datos"
 subtitle: "Análisis Exploratorio de Datos, Máster en Ciencia de Datos - UV"
 output:
+  pdf_document:
+    toc: yes
+    toc_depth: 3
+    number_sections: no
   html_document:
     echo: yes
     number_sections: no
     theme: lumen
     toc: yes
-  pdf_document:
-    toc: yes
-    toc_depth: 3
-    number_sections: no
 ---
 
 ```{r setup, cache=F, echo=F, message=F, warning=F, tidy=F}
@@ -393,7 +393,7 @@ Existen variables que, a priori, no tienen demasiado interés para el estudio qu
 #usamos select para poner las columnas que queremos, o en este caso, es más útil poner las que NO queremos,
 #con el "-". Además, con la función ends_with podemos identificar que variables acaban en "time".
 flights <- flights %>% select(-time_hour, -ends_with("time"))
-planes<- planes %>% select(-seed,-type)
+planes<- planes %>% select(-speed,-type)
 ```
 
 ### Ejercicio 10
